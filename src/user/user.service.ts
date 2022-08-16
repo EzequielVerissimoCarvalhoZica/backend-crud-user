@@ -28,6 +28,10 @@ export class UserService {
     });
   }
 
+  async findOne(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email });
+  }
+
   async create(data: UserCreateDto): Promise<any> {
     const result = await this.userRepository.findBy({ email: data.email });
 
@@ -58,10 +62,15 @@ export class UserService {
         throw new ConflictException('Email already exists');
     }
 
+    const newData = {
+      ...data,
+      updatedAt: data.updatedAt || new Date().toISOString(),
+    };
+
     await this.userRepository
       .createQueryBuilder()
       .update(User)
-      .set(data)
+      .set(newData)
       .where('id = :id', { id })
       .execute();
   }
