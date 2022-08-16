@@ -50,12 +50,11 @@ export class UserService {
     };
   }
 
-  async update(id: any, data: UserUpdateDto): Promise<any> {
+  async update(id: string, data: UserUpdateDto): Promise<any> {
     if (data.email) {
       const result = await this.userRepository.findOneBy({ email: data.email });
-      console.log(result.id, id);
 
-      if (result && result.id !== id)
+      if (result && result.id !== Number(id))
         throw new ConflictException('Email already exists');
     }
 
