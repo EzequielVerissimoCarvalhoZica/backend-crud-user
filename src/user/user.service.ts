@@ -1,18 +1,8 @@
-import {
-  Injectable,
-  Inject,
-  ConflictException,
-  ParamData,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Inject, ConflictException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user.create.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { User } from './user.entity';
-
-interface teste {
-  id: string;
-}
 
 @Injectable()
 export class UserService {
