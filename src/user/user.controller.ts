@@ -17,4 +17,11 @@ export class UserController {
   async create(@Body() data: UserCreateDto): Promise<any> {
     return this.userService.create(data);
   }
+
+  @Put('update/:id')
+  async update(@Param() { id }, @Body() data: UserUpdateDto): Promise<any> {
+    await this.userService.update(id, data);
+
+    return { message: 'User updated' };
+  }
 }
