@@ -27,7 +27,9 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    const users = await this.userService.findAll();
+
+    return users.filter((user) => user.email !== 'adm@admin.com');
   }
 
   @UseGuards(JwtAuthGuard)
