@@ -6,6 +6,7 @@ import {
 import { Request, Response, NextFunction } from 'express';
 import Validations from 'src/helpers/fieldsValidations';
 import ILoginBody from 'src/types/interfaces/ILoginBody';
+import { UserCreateDto } from 'src/user/dto/user.create.dto';
 import { User } from 'src/user/user.entity';
 
 interface IRequestLogin extends Request, ILoginBody {}
@@ -22,6 +23,46 @@ export class LoggerMiddleware implements NestMiddleware {
     const validations = new Validations(user);
 
     if (!(validations.validEmail() && validations.validPassword()))
+      throw new UnprocessableEntityException();
+
+    next();
+  }
+}
+
+interface IRequestCreate extends Request, UserCreateDto {}
+
+@Injectable()
+export class CreateMiddleware implements NestMiddleware {
+  use(req: IRequestCreate, _res: Response, next: NextFunction) {
+    const { name, password, email, role, dateOfBirth, phoneNumber, status } =
+      req.body;
+
+    const user = new User();
+    if (!(email && password && name && role && dateOfBirth && phoneNumber)) {
+      throw new UnprocessableEntityException();
+    }
+
+    user.email = email;
+    user.password = password;
+    user.name = name;
+    user.role = role;
+    user.dateOfBirth = dateOfBirth;
+    user.phoneNumber = phoneNumber;
+    user.status = status || true;
+
+    const validations = new Validations(user);
+
+    if (
+      !(
+        validations.validEmail() &&
+        validations.validPassword() &&
+        validations.validName() &&
+        validations.validRole() &&
+        validations.validDateOfBirth() &&
+        validations.validPhoneNumber() &&
+        validations.validStatus()
+      )
+    )
       throw new UnprocessableEntityException();
 
     next();
