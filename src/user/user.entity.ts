@@ -14,6 +14,15 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
+  @Column({ length: 10 })
+  role: string;
+
+  @Column()
+  phoneNumber: string;
+
+  @Column()
+  dateOfBirth: string;
+
   @Column('text')
   status: string;
 
