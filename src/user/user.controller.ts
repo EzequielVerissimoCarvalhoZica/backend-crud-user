@@ -46,8 +46,9 @@ export class UserController {
     @Body() data: UserUpdateDto,
   ): Promise<any> {
     await this.userService.update(id, data);
+    const { password, ...user } = data;
 
-    return { message: 'User updated' };
+    return { updated: true, user };
   }
 
   @UseGuards(JwtAuthGuard)
