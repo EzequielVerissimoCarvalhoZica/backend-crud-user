@@ -3,8 +3,12 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
+  RequestMethod,
 } from '@nestjs/common';
-import { LoggerMiddleware } from '../common/middleware/fieldsValidations.middleware';
+import {
+  CreateMiddleware,
+  LoggerMiddleware,
+} from '../common/middleware/fieldsValidations.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { UserController } from './user.controller';
@@ -20,5 +24,8 @@ import { UserService } from './user.service';
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('user/login');
+    consumer
+      .apply(CreateMiddleware)
+      .forRoutes({ path: 'user', method: RequestMethod.POST });
   }
 }
