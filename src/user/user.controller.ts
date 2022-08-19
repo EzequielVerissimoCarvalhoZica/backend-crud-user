@@ -12,6 +12,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import ILoginBody from 'src/types/interfaces/ILoginBody';
 import { UserCreateDto } from './dto/user.create.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { User } from './user.entity';
@@ -58,7 +59,7 @@ export class UserController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   @HttpCode(200)
-  async login(@Body() data) {
+  async login(@Body() data: ILoginBody) {
     return this.authService.login(data);
   }
 }
