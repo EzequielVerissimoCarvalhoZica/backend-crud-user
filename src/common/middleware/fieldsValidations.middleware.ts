@@ -34,18 +34,17 @@ interface IRequestCreate extends Request, UserCreateDto {}
 @Injectable()
 export class CreateMiddleware implements NestMiddleware {
   use(req: IRequestCreate, _res: Response, next: NextFunction) {
-    const { name, password, email, role, dateOfBirth, phoneNumber, status } =
+    const { name, password, email, dateOfBirth, phoneNumber, status } =
       req.body;
 
     const user = new User();
-    if (!(email && password && name && role && dateOfBirth && phoneNumber)) {
+    if (!(email && password && name && dateOfBirth && phoneNumber)) {
       throw new UnprocessableEntityException();
     }
 
     user.email = email;
     user.password = password;
     user.name = name;
-    user.role = role;
     user.dateOfBirth = dateOfBirth;
     user.phoneNumber = phoneNumber;
     user.status = status || true;
@@ -57,7 +56,6 @@ export class CreateMiddleware implements NestMiddleware {
         validations.validEmail() &&
         validations.validPassword() &&
         validations.validName() &&
-        validations.validRole() &&
         validations.validDateOfBirth() &&
         validations.validPhoneNumber() &&
         validations.validStatus()

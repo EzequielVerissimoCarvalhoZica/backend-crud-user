@@ -26,12 +26,6 @@ export default class Validations {
     return typeof password === 'string' && password.length >= 6;
   };
 
-  validRole = (): boolean => {
-    const { role } = this.user;
-
-    return typeof role === 'string' && (role === 'admin' || role === 'client');
-  };
-
   validPhoneNumber = (): boolean => {
     const { phoneNumber } = this.user;
 

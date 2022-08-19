@@ -4,7 +4,6 @@ export interface UserUpdateDto {
   password?: string;
   status?: boolean;
   updatedAt?: string;
-  role?: string;
   dateOfBirth?: string;
   phoneNumber?: string;
 }
