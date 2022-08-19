@@ -23,8 +23,8 @@ export class User {
   @Column()
   dateOfBirth: string;
 
-  @Column('text')
-  status: string;
+  @Column()
+  status: boolean;
 
   @Column()
   updatedAt: string;

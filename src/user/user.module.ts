@@ -1,4 +1,10 @@
-import { forwardRef, Module } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
+import { LoggerMiddleware } from '../common/middleware/fieldsValidations.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
 import { UserController } from './user.controller';
@@ -11,4 +17,8 @@ import { UserService } from './user.service';
   providers: [...userProviders, UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('user/login');
+  }
+}
