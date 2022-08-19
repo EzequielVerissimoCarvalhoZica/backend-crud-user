@@ -8,6 +8,7 @@ import {
 import {
   CreateMiddleware,
   LoggerMiddleware,
+  UpdateMiddleware,
 } from '../common/middleware/fieldsValidations.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { DatabaseModule } from '../database/database.module';
@@ -27,5 +28,8 @@ export class UserModule implements NestModule {
     consumer
       .apply(CreateMiddleware)
       .forRoutes({ path: 'user', method: RequestMethod.POST });
+    consumer
+      .apply(UpdateMiddleware)
+      .forRoutes({ path: 'user/:id', method: RequestMethod.PUT });
   }
 }

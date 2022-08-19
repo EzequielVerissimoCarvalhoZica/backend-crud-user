@@ -3,6 +3,20 @@ import { User } from 'src/user/user.entity';
 export default class Validations {
   constructor(private user: User) {}
 
+  static validBodyRequest = (body: object): boolean => {
+    const userProperties = [
+      'name',
+      'email',
+      'password',
+      'status',
+      'updatedAt',
+      'dateOfBirth',
+      'phoneNumber',
+    ];
+
+    return Object.keys(body).every((key) => userProperties.includes(key));
+  };
+
   validEmail = (): boolean => {
     const { email } = this.user;
     const regEx =
