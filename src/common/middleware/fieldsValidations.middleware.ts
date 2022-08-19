@@ -37,6 +37,10 @@ export class CreateMiddleware implements NestMiddleware {
     const { name, password, email, dateOfBirth, phoneNumber, status } =
       req.body;
 
+    if (!Validations.validBodyRequest(req.body)) {
+      throw new UnprocessableEntityException();
+    }
+
     const user = new User();
     if (!(email && password && name && dateOfBirth && phoneNumber)) {
       throw new UnprocessableEntityException();
@@ -62,6 +66,63 @@ export class CreateMiddleware implements NestMiddleware {
       )
     )
       throw new UnprocessableEntityException();
+
+    next();
+  }
+}
+
+@Injectable()
+export class UpdateMiddleware implements NestMiddleware {
+  use(req: IRequestCreate, _res: Response, next: NextFunction) {
+    const { name, password, email, dateOfBirth, phoneNumber, status } =
+      req.body;
+
+    const user = new User();
+    if (!(email || password || name || dateOfBirth || phoneNumber)) {
+      throw new UnprocessableEntityException();
+    }
+
+    user.email = email;
+    user.password = password;
+    user.name = name;
+    user.dateOfBirth = dateOfBirth;
+    user.phoneNumber = phoneNumber;
+    user.status = status || true;
+
+    const validations = new Validations(user);
+    if (!Validations.validBodyRequest(req.body)) {
+      throw new UnprocessableEntityException();
+    }
+    if (email) {
+      if (!validations.validEmail()) {
+        throw new UnprocessableEntityException();
+      }
+    }
+    if (password) {
+      if (!validations.validPassword()) {
+        throw new UnprocessableEntityException();
+      }
+    }
+    if (name) {
+      if (!validations.validName()) {
+        throw new UnprocessableEntityException();
+      }
+    }
+    if (dateOfBirth) {
+      if (!validations.validDateOfBirth()) {
+        throw new UnprocessableEntityException();
+      }
+    }
+    if (phoneNumber) {
+      if (!validations.validPhoneNumber()) {
+        throw new UnprocessableEntityException();
+      }
+    }
+    if (status) {
+      if (!validations.validStatus()) {
+        throw new UnprocessableEntityException();
+      }
+    }
 
     next();
   }
