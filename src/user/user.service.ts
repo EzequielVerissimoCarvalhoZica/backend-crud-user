@@ -54,7 +54,7 @@ export class UserService {
     if (data.email) {
       const result = await this.userRepository.findOneBy({ email: data.email });
 
-      if (result.role === 'admin') throw new UnauthorizedException();
+      if (result && result.role === 'admin') throw new UnauthorizedException();
 
       if (result && result.id !== Number(id))
         throw new ConflictException('Email already exists');
