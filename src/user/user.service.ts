@@ -41,7 +41,7 @@ export class UserService {
     user.email = data.email;
     user.name = data.name;
     user.password = data.password;
-    user.status = data.status || 'ativo';
+    user.status = data.status || true;
     user.updatedAt = data.updatedAt || new Date().toISOString();
 
     const userCreated = await this.userRepository.save(user);
