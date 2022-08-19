@@ -3,6 +3,7 @@ import {
   Inject,
   ConflictException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/user.create.dto';
@@ -41,22 +42,19 @@ export class UserService {
     user.email = data.email;
     user.name = data.name;
     user.password = data.password;
+    user.dateOfBirth = data.dateOfBirth;
+    user.phoneNumber = data.phoneNumber;
     user.status = data.status || true;
-    user.updatedAt = data.updatedAt || new Date().toISOString();
 
-    const userCreated = await this.userRepository.save(user);
-    return {
-      id: userCreated.id,
-      name: userCreated.name,
-      email: userCreated.email,
-      status: userCreated.status,
-      updatedAt: userCreated.updatedAt,
-    };
+    const { password, ...userCreated } = await this.userRepository.save(user);
+    return userCreated;
   }
 
   async update(id: string, data: UserUpdateDto): Promise<any> {
     if (data.email) {
       const result = await this.userRepository.findOneBy({ email: data.email });
+
+      if (result.role === 'admin') throw new UnauthorizedException();
 
       if (result && result.id !== Number(id))
         throw new ConflictException('Email already exists');
@@ -64,7 +62,7 @@ export class UserService {
 
     const newData = {
       ...data,
-      updatedAt: data.updatedAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     await this.userRepository
