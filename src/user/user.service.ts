@@ -41,17 +41,14 @@ export class UserService {
     user.email = data.email;
     user.name = data.name;
     user.password = data.password;
+    user.role = data.role;
+    user.dateOfBirth = data.dateOfBirth;
+    user.phoneNumber = data.phoneNumber;
     user.status = data.status || true;
     user.updatedAt = data.updatedAt || new Date().toISOString();
 
-    const userCreated = await this.userRepository.save(user);
-    return {
-      id: userCreated.id,
-      name: userCreated.name,
-      email: userCreated.email,
-      status: userCreated.status,
-      updatedAt: userCreated.updatedAt,
-    };
+    const { password, ...userCreated } = await this.userRepository.save(user);
+    return userCreated;
   }
 
   async update(id: string, data: UserUpdateDto): Promise<any> {
